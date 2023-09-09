@@ -1,0 +1,10 @@
+footer{
+    background-image: url('../../../assets/icons/background_lateral.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: 'bottom';
+}
+
+.menu{
+    background-image: url('../../../assets/background_blocks.png');
+}
