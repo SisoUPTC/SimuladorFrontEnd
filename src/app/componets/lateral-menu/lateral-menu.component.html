@@ -1,0 +1,22 @@
+<div class="h-screen bg-yellow w-full relative menu">
+  <div class="p-5 cursor-pointer" (click)="redirectToMenu()">
+    <img src="assets/tittle.png" alt="" />
+  </div>
+  <div class="h-10"></div>
+  <div class="px-10">
+    <app-button
+      *ngFor="let button of listButtons"
+      [text]="button.text"
+      [icon]="button.icon"
+      [disabled]="button.disabled"
+      class="inline-block w-full mb-5"
+    ></app-button>
+  </div>
+  <div class="absolute bottom-0 w-full px-5">
+    <footer class="w-full h-24">
+        <div class="relative w-full h-full">
+            <p class="absolute text-center bottom-2 w-full">V: 1.0.0</p>
+        </div>
+      </footer>
+  </div>
+</div>

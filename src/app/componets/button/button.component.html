@@ -1,0 +1,8 @@
+<button
+  class="rounded w-full p-2 px-3 {{ styleDisabled }} {{ styleType }}"
+  (click)="onClick.emit()"
+  [disabled]="disabled"
+>
+  <img [src]="icon" class="w-5 float-left" />
+  <p class="text-white text-left pl-12">{{ text }}</p>
+</button>
