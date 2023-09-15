@@ -1,5 +1,9 @@
 <button
-  class="rounded w-full p-2 px-3 {{ styleDisabled }} {{ styleType }}"
+  class="rounded w-full p-2 px-3 {{ styleType }} {{
+    disabled
+      ? 'bg-opacity-30 text-opacity-30 border-opacity-30 cursor-not-allowed'
+      : ''
+  }}"
   (click)="onClick.emit()"
   [disabled]="disabled"
 >
