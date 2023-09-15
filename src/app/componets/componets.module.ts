@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ToggleButtonComponent } from './toggle-button/toggle-button.component';
 import { CardComponent } from './card/card.component';
 import { TableComponent } from './table/table.component';
+import { LoadingComponent } from './loading/loading.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { TableComponent } from './table/table.component';
     SimulationComponent,
     ToggleButtonComponent,
     CardComponent,
-    TableComponent
+    TableComponent,
+    LoadingComponent,
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { TableComponent } from './table/table.component';
     LateralMenuComponent,
     ButtonComponent,
     WelcomeComponent, 
-    ToggleButtonComponent
+    ToggleButtonComponent,
+    LoadingComponent
   ]
 })
 export class ComponetsModule { }
