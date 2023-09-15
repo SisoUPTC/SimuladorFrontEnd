@@ -1,0 +1,116 @@
+<div class="px-10 grid grid-cols-2">
+  <span class="text-30 font-w700 text-left"
+    >Tiempo de reloj: <span class="text-orange">0</span></span
+  >
+  <div class="text-30 font-w700 text-right">
+    <span class="font-w400 mr-3">Paso a paso</span>
+    <app-toggle-button class="translate-y-1 inline-block" [value]="true"></app-toggle-button>
+  </div>
+</div>
+<main class="px-10 mt-5">
+  <div class="grid grid-cols-3 gap-5 h-80">
+    <app-card color="white h-full" class="col-span-2">
+      <div class="w-full">
+        <p class="text-28 font-w700 text-center mb-5">Procesador</p>
+        <div class="grid grid-cols-5">
+          <div class="col-span-2 text-center flex items-center justify-center">
+            <div class="inline-block text-center">
+              <div class="w-10 h-10 bg-orange rounded-full inline-block"></div>
+              <p class="text-21 font-w700 text-orange">Ocupado</p>
+            </div>
+          </div>
+          <div class="col-span-3 px-5 border-l border-gray pb-3">
+            <p class="mb-2 text-left">Procesando a</p>
+            <app-card color="beish2 p-2 grid grid-cols-2">
+              <div>
+                <p class="text-20 font-w700 text-left">Proceso [1]:</p>
+                <ul>
+                  <li class="text-left">
+                    <span class="font-w700">Id:</span> 1
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">Life Time:</span> 1
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">Next IO:</span> 1
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">IO:</span> 1
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">Quantum:</span> 1
+                  </li>
+                </ul>
+              </div>
+              <div class="text-center flex items-center justify-center">
+                <div class="inline-block text-center">
+                  <div
+                    class="w-10 h-10 bg-green rounded-full inline-block"
+                  ></div>
+                  <p class="text-21 font-w700 text-green">Running</p>
+                </div>
+              </div>
+            </app-card>
+          </div>
+        </div>
+      </div>
+    </app-card>
+    <app-card color="white h-full">
+      <div class="w-full">
+        <p class="text-28 font-w700 text-center">Eventos</p>
+        <ul>
+          <li class="text-left">(0) Proceso [1] - creado</li>
+          <li class="text-left">(1) Proceso [2] - creado</li>
+          <li class="text-left">(2) Proceso [3] - creado</li>
+          <li class="text-left">(3) Proceso [4] - creado</li>
+          <li class="text-left">(4) Proceso [5] - creado</li>
+          <li class="text-left">(5) Proceso [6] - creado</li>
+          <li class="text-left">(6) Proceso [7] - creado</li>
+          <li class="text-left">(7) Proceso [8] - creado</li>
+        </ul>
+      </div>
+    </app-card>
+  </div>
+  <div class="grid grid-cols-12 my-5">
+    <p class="text-30 font-w700 text-center col-span-3">Cola de procesos</p>
+    <div class="bg-black h-1 translate-y-5 col-span-9"></div>
+  </div>
+  <div class="grid grid-cols-2 gap-5 h-72 mb-10">
+    <app-card color="white h-72 w-full p-2">
+      <p class="text-28 font-w700 text-center mb-3">Procesos listos</p>
+      <div class="h-52">
+        <app-table [columns]="columns">
+          <tr *ngFor="let data of dataReady">
+            <td>{{data.id}}</td>
+            <td>{{data.lifeTime}}</td>
+            <td>{{data.nextIO}}</td>
+            <td>{{data.io}}</td>
+            <td>{{data.state}}</td>
+            <td>{{data.quantum}}</td>
+          </tr>
+        </app-table>
+      </div>
+    </app-card>
+    <app-card color="white h-72 w-full p-2">
+      <p class="text-28 font-w700 text-center mb-3">Procesos Bloqueados</p>
+      <div class="h-52">
+        <app-table [columns]="columns">
+          <tr *ngFor="let data of dataBloqued">
+            <td>{{data.id}}</td>
+            <td>{{data.lifeTime}}</td>
+            <td>{{data.nextIO}}</td>
+            <td>{{data.io}}</td>
+            <td>{{data.state}}</td>
+            <td>{{data.quantum}}</td>
+          </tr>
+        </app-table>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="w-full flex items-center justify-center">
+    <img src="assets/icons/arrow_left_icon.png" class="w-14 mr-5 cursor-pointer" />
+    <p class="mx-5 text-28 font-w700">1 de 20</p>
+    <img src="assets/icons/arrow_right_icon.png" class="w-14 ml-5 cursor-pointer" />
+  </div>
+</main>

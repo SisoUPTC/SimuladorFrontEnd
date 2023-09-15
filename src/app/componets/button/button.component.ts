@@ -12,13 +12,6 @@ export class ButtonComponent {
   @Input() disabled: boolean = false;
   @Output() onClick: EventEmitter<void> = new EventEmitter();
 
-  get styleDisabled(): string {
-    if (this.disabled) {
-      return `bg-opacity-30 text-opacity-30 border-opacity-30 cursor-not-allowed`;
-    }
-    return '';
-  }
-
   get styleType(): string {
     return `border-none bg-${this.color}`;
   }

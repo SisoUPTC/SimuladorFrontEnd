@@ -10,6 +10,10 @@ const theme = {
       'gray-dark': '#1E1E1E',
       'beish': '#FFFFEE',
       'gray': '#CCCCCC',
+      'orange': '#FF7D05',
+      'beish2': '#FBEAD9',
+      'white': '#FFFFFF',
+      'green': '#08AD05',
     },
     height: {
       '11/12': '95%',
