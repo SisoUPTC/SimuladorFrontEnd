@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
-  isLoading = true
+  static isLoading = false
+
+  get loading() {
+    return MenuComponent.isLoading
+  }
 }

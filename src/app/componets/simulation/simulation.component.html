@@ -1,44 +1,70 @@
 <div class="px-10 grid grid-cols-2">
   <span class="text-30 font-w700 text-left"
-    >Tiempo de reloj: <span class="text-orange">0</span></span
+    >Tiempo de reloj: <span class="text-orange">{{ actualClock }}</span></span
   >
   <div class="text-30 font-w700 text-right">
     <span class="font-w400 mr-3">Paso a paso</span>
-    <app-toggle-button class="translate-y-1 inline-block" [value]="true"></app-toggle-button>
+    <app-toggle-button
+      class="translate-y-1 inline-block"
+      [value]="true"
+    ></app-toggle-button>
   </div>
 </div>
 <main class="px-10 mt-5">
   <div class="grid grid-cols-3 gap-5 h-80">
     <app-card color="white h-full" class="col-span-2">
-      <div class="w-full">
+      <div class="w-full h-full">
         <p class="text-28 font-w700 text-center mb-5">Procesador</p>
-        <div class="grid grid-cols-5">
-          <div class="col-span-2 text-center flex items-center justify-center">
+        <div class="grid grid-cols-5 h-1/2">
+          <div
+            class="col-span-{{
+              cpuProcess ? '2' : '5'
+            }} text-center flex items-center justify-center"
+          >
             <div class="inline-block text-center">
-              <div class="w-10 h-10 bg-orange rounded-full inline-block"></div>
-              <p class="text-21 font-w700 text-orange">Ocupado</p>
+              <div
+                class="w-10 h-10 bg-{{
+                  cpuStatus == 'BUSY' ? 'orange' : 'green'
+                }} rounded-full inline-block"
+              ></div>
+              <p
+                class="text-21 font-w700 text-{{
+                  cpuStatus == 'BUSY' ? 'orange' : 'green'
+                }}"
+              >
+                {{ cpuStatus == "BUSY" ? "Ocupado" : "Disponible" }}
+              </p>
             </div>
           </div>
-          <div class="col-span-3 px-5 border-l border-gray pb-3">
+          <div
+            class="col-span-3 px-5 border-l border-gray pb-3"
+            *ngIf="cpuProcess"
+          >
             <p class="mb-2 text-left">Procesando a</p>
             <app-card color="beish2 p-2 grid grid-cols-2">
               <div>
-                <p class="text-20 font-w700 text-left">Proceso [1]:</p>
+                <p class="text-20 font-w700 text-left">
+                  Proceso [{{ cpuProcess.id }}]:
+                </p>
                 <ul>
                   <li class="text-left">
-                    <span class="font-w700">Id:</span> 1
+                    <span class="font-w700">Id:</span> {{ cpuProcess.id }}
                   </li>
                   <li class="text-left">
-                    <span class="font-w700">Life Time:</span> 1
+                    <span class="font-w700">Life Time:</span>
+                    {{ cpuProcess.timeToLive + "/" + cpuProcess.lifeTime }}
                   </li>
                   <li class="text-left">
-                    <span class="font-w700">Next IO:</span> 1
+                    <span class="font-w700">Next IO:</span>
+                    {{ cpuProcess.nextIOTTL + "/" + cpuProcess.nextIOTime }}
                   </li>
                   <li class="text-left">
-                    <span class="font-w700">IO:</span> 1
+                    <span class="font-w700">IO:</span>
+                    {{ cpuProcess.iotimeToLive + "/" + cpuProcess.iotime }}
                   </li>
                   <li class="text-left">
-                    <span class="font-w700">Quantum:</span> 1
+                    <span class="font-w700">Quantum:</span>
+                    {{ cpuProcess.quantum }}
                   </li>
                 </ul>
               </div>
@@ -47,7 +73,15 @@
                   <div
                     class="w-10 h-10 bg-green rounded-full inline-block"
                   ></div>
-                  <p class="text-21 font-w700 text-green">Running</p>
+                  <p class="text-21 font-w700 text-green">
+                    {{
+                      cpuProcess.status == "RUNNING"
+                        ? "Corriendo"
+                        : cpuProcess.status == "READY"
+                        ? "Listo"
+                        : "Bloqueado"
+                    }}
+                  </p>
                 </div>
               </div>
             </app-card>
@@ -59,14 +93,7 @@
       <div class="w-full">
         <p class="text-28 font-w700 text-center">Eventos</p>
         <ul>
-          <li class="text-left">(0) Proceso [1] - creado</li>
-          <li class="text-left">(1) Proceso [2] - creado</li>
-          <li class="text-left">(2) Proceso [3] - creado</li>
-          <li class="text-left">(3) Proceso [4] - creado</li>
-          <li class="text-left">(4) Proceso [5] - creado</li>
-          <li class="text-left">(5) Proceso [6] - creado</li>
-          <li class="text-left">(6) Proceso [7] - creado</li>
-          <li class="text-left">(7) Proceso [8] - creado</li>
+          <li class="text-left" *ngFor="let event of events">{{ event }}</li>
         </ul>
       </div>
     </app-card>
@@ -80,13 +107,13 @@
       <p class="text-28 font-w700 text-center mb-3">Procesos listos</p>
       <div class="h-52">
         <app-table [columns]="columns">
-          <tr *ngFor="let data of dataReady">
-            <td>{{data.id}}</td>
-            <td>{{data.lifeTime}}</td>
-            <td>{{data.nextIO}}</td>
-            <td>{{data.io}}</td>
-            <td>{{data.state}}</td>
-            <td>{{data.quantum}}</td>
+          <tr *ngFor="let data of readyProceesses">
+            <td>{{ data.id }}</td>
+            <td>{{ data.timeToLive + "/" + data.lifeTime }}</td>
+            <td>{{ data.nextIOTTL + "/" + data.nextIOTime }}</td>
+            <td>{{ data.iotimeToLive + "/" + data.iotime }}</td>
+            <td>{{ data.status }}</td>
+            <td>{{ data.quantum }}</td>
           </tr>
         </app-table>
       </div>
@@ -95,13 +122,13 @@
       <p class="text-28 font-w700 text-center mb-3">Procesos Bloqueados</p>
       <div class="h-52">
         <app-table [columns]="columns">
-          <tr *ngFor="let data of dataBloqued">
-            <td>{{data.id}}</td>
-            <td>{{data.lifeTime}}</td>
-            <td>{{data.nextIO}}</td>
-            <td>{{data.io}}</td>
-            <td>{{data.state}}</td>
-            <td>{{data.quantum}}</td>
+          <tr *ngFor="let data of blockProcesses">
+            <td>{{ data.id }}</td>
+            <td>{{ data.timeToLive + "/" + data.lifeTime }}</td>
+            <td>{{ data.nextIOTTL + "/" + data.nextIOTime }}</td>
+            <td>{{ data.iotimeToLive + "/" + data.iotime }}</td>
+            <td>{{ data.status }}</td>
+            <td>{{ data.quantum }}</td>
           </tr>
         </app-table>
       </div>
@@ -109,8 +136,27 @@
   </div>
 
   <div class="w-full flex items-center justify-center">
-    <img src="assets/icons/arrow_left_icon.png" class="w-14 mr-5 cursor-pointer" />
-    <p class="mx-5 text-28 font-w700">1 de 20</p>
-    <img src="assets/icons/arrow_right_icon.png" class="w-14 ml-5 cursor-pointer" />
+    <img
+      src="assets/icons/arrow_left_icon.png"
+      class="w-14 mr-5 cursor-pointer"
+      (click)="previousClock()"
+    />
+    <p class="mx-5 text-28 font-w700">
+      <input
+        type="number"
+        [value]="actualClock"
+        min="0"
+        [max]="totalTimes"
+        (input)="getClock(input.value)"
+        #input
+        class="inline-block w-24 text-center rounded border"
+      />
+      de {{ totalTimes }}
+    </p>
+    <img
+      src="assets/icons/arrow_right_icon.png"
+      class="w-14 ml-5 cursor-pointer"
+      (click)="nextClock()"
+    />
   </div>
 </main>

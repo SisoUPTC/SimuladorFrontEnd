@@ -9,7 +9,7 @@
       [text]="button.text"
       [icon]="button.icon"
       [disabled]="button.disabled"
-      (onClick)="button.id == 1? showWindow():undefined"
+      (onClick)="button.id == 1? showWindow(): button.id == 2 ? redirectToGraphics(): redirectToSimulation()"
       class="inline-block w-full mb-5"
     ></app-button>
   </div>
