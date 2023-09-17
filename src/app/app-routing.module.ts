@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MenuComponent } from './pages/menu/menu.component';
 import { WelcomeComponent } from './componets/welcome/welcome.component';
 import { SimulationComponent } from './componets/simulation/simulation.component';
+import { GraphicsComponent } from './componets/graphics/graphics.component';
+import { simulationGuard } from './guards/simulation.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'menu/welcome', pathMatch: 'full' },
@@ -11,7 +13,8 @@ const routes: Routes = [
     component: MenuComponent,
     children: [
       { path: 'welcome', component: WelcomeComponent },
-      { path: 'simulation', component: SimulationComponent },
+      { path: 'simulation', component: SimulationComponent, canActivate: [simulationGuard] },
+      { path: 'graphics', component: GraphicsComponent, canActivate: [simulationGuard]},
     ],
   },
 ];

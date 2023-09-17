@@ -14,6 +14,7 @@ const theme = {
       'beish2': '#FBEAD9',
       'white': '#FFFFFF',
       'green': '#08AD05',
+      'chiken-yellow': '#FFD700',
     },
     height: {
       '11/12': '95%',

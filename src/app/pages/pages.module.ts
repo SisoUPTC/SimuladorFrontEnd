@@ -14,6 +14,9 @@ import { AppRoutingModule } from '../app-routing.module';
     CommonModule,
     ComponetsModule,
     AppRoutingModule
+  ],
+  exports: [
+    MenuComponent
   ]
 })
 export class PagesModule { }

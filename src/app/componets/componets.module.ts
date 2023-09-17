@@ -9,6 +9,8 @@ import { ToggleButtonComponent } from './toggle-button/toggle-button.component';
 import { CardComponent } from './card/card.component';
 import { TableComponent } from './table/table.component';
 import { LoadingComponent } from './loading/loading.component';
+import { GraphicsComponent } from './graphics/graphics.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -21,10 +23,12 @@ import { LoadingComponent } from './loading/loading.component';
     CardComponent,
     TableComponent,
     LoadingComponent,
+    GraphicsComponent,
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxChartsModule
   ],
   exports: [
     LateralMenuComponent,
