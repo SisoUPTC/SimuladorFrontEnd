@@ -45,20 +45,28 @@ export class LateralMenuComponent {
       title: 'Datos de Entrada',
       html: `
       <p>Digite tiempo de simulación (Segundos) (1 - 20000)</p>
-      <input type="number" id="swal-input1" class="swal2-input">`,
+      <input type="number" id="swal-input1" class="swal2-input">
+      <hr style="margin-top: 20px">
+      <p style="margin-top: 20px">Digite delay de simulación (segundos)</p>
+      <input type="number" id="swal-input2" class="swal2-input">`,
       focusConfirm: false,
       preConfirm: () => {
         const inputOne: HTMLElement | null =
           document.getElementById('swal-input1');
         let valueOne;
-        if (inputOne instanceof HTMLInputElement) {
+        const inputTwo: HTMLElement | null =
+          document.getElementById('swal-input2');
+        let valueTwo;
+        if (inputOne instanceof HTMLInputElement && inputTwo instanceof HTMLInputElement) {
           valueOne = inputOne?.value;
+          valueTwo = inputTwo?.value;
         }
-        return [valueOne];
+        return [valueOne, valueTwo];
       },
     });
-    if (formValues && formValues.length == 1 && formValues[0] > 0 && formValues[0] <= 20000) {
+    if (formValues && formValues.length == 2 && formValues[0] > 0 && formValues[0] <= 20000) {
       MenuComponent.isLoading = true;
+      this.simulationService.delay = formValues[1] * 1000;
       await this.simulationService.startSimulation(formValues[0]);
       MenuComponent.isLoading = false;
       this.listButtons[1].disabled = false;

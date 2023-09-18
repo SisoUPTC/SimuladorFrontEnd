@@ -17,6 +17,7 @@ export class SimulationComponent implements OnInit {
   cpuProcess?: Process;
   events: string[] = [];
   totalTimes: number = 0;
+  isFinished = false;
 
   constructor(private simulationService: SimulationService) {}
 
@@ -33,6 +34,7 @@ export class SimulationComponent implements OnInit {
     this.readyProceesses = results.data.readyProceesses;
     this.blockProcesses = results.data.blockProcesses;
     this.events = results.data.events;
+    this.startSimulation();
   }
 
   previousClock() {
@@ -41,9 +43,23 @@ export class SimulationComponent implements OnInit {
     }
   }
 
-  nextClock() {
+  startSimulation() {
+    const delay = this.simulationService.delay
+    const timeOut = setTimeout(async ()=>{
+      if(await this.nextClock()){
+        clearTimeout(timeOut);
+        this.isFinished = true;
+      }
+    }, delay)
+  }
+
+
+  async nextClock() {
     if (this.actualClock < this.totalTimes) {
-      this.getResult(++this.actualClock);
+      await this.getResult(++this.actualClock);
+      return false;
+    }else{
+      return true;
     }
   }
 

@@ -4,27 +4,35 @@ import { firstValueFrom } from 'rxjs';
 import { ResponseApi } from '../models/responseApi';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SimulationService {
+  private url = 'https://simuladorbackend-production.up.railway.app/simulator';
+  delay: number = 1000;
 
-  private url = 'http://localhost:8080/simulator';
-
-  constructor(private http: HttpClient ) {}
+  constructor(private http: HttpClient) {}
 
   async startSimulation(time: number) {
-    return await firstValueFrom(this.http.post<ResponseApi>(`${this.url}/start/${time}`, null));
+    return await firstValueFrom(
+      this.http.post<ResponseApi>(`${this.url}/start/${time}`, null)
+    );
   }
 
   async getResults(clock: number) {
-    return await firstValueFrom(this.http.get<ResponseApi>(`${this.url}/results/${clock}`));
+    return await firstValueFrom(
+      this.http.get<ResponseApi>(`${this.url}/results/${clock}`)
+    );
   }
 
   async getGraphics() {
-    return await firstValueFrom(this.http.get<ResponseApi>(`${this.url}/graphics`));
+    return await firstValueFrom(
+      this.http.get<ResponseApi>(`${this.url}/graphics`)
+    );
   }
 
   async isSimulationRunning() {
-    return await firstValueFrom(this.http.get<ResponseApi>(`${this.url}/isStarted`));
+    return await firstValueFrom(
+      this.http.get<ResponseApi>(`${this.url}/isStarted`)
+    );
   }
 }

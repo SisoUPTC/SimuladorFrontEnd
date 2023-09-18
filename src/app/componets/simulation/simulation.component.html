@@ -135,7 +135,7 @@
     </app-card>
   </div>
 
-  <div class="w-full flex items-center justify-center">
+  <div class="w-full flex items-center justify-center" *ngIf="isFinished; else notFinish">
     <img
       src="assets/icons/arrow_left_icon.png"
       class="w-14 mr-5 cursor-pointer"
@@ -159,4 +159,7 @@
       (click)="nextClock()"
     />
   </div>
+  <ng-template #notFinish>
+    <p class="text-36 font-w700"> Cargando ... </p>
+  </ng-template>
 </main>
