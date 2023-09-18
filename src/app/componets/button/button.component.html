@@ -1,0 +1,12 @@
+<button
+  class="rounded w-full p-2 px-3 {{ styleType }} {{
+    disabled
+      ? 'bg-opacity-30 text-opacity-30 border-opacity-30 cursor-not-allowed'
+      : ''
+  }}"
+  (click)="onClick.emit()"
+  [disabled]="disabled"
+>
+  <img [src]="icon" class="w-5 float-left" />
+  <p class="text-white text-left pl-12">{{ text }}</p>
+</button>

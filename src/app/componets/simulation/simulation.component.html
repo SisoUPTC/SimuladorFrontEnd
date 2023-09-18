@@ -1,0 +1,165 @@
+<div class="px-10 grid grid-cols-2">
+  <span class="text-30 font-w700 text-left"
+    >Tiempo de reloj: <span class="text-orange">{{ actualClock }}</span></span
+  >
+  <div class="text-30 font-w700 text-right">
+    <span class="font-w400 mr-3">Paso a paso</span>
+    <app-toggle-button
+      class="translate-y-1 inline-block"
+      [value]="true"
+    ></app-toggle-button>
+  </div>
+</div>
+<main class="px-10 mt-5">
+  <div class="grid grid-cols-3 gap-5 h-80">
+    <app-card color="white h-full" class="col-span-2">
+      <div class="w-full h-full">
+        <p class="text-28 font-w700 text-center mb-5">Procesador</p>
+        <div class="grid grid-cols-5 h-1/2">
+          <div
+            class="col-span-{{
+              cpuProcess ? '2' : '5'
+            }} text-center flex items-center justify-center"
+          >
+            <div class="inline-block text-center">
+              <div
+                class="w-10 h-10 bg-{{
+                  cpuStatus == 'BUSY' ? 'orange' : 'green'
+                }} rounded-full inline-block"
+              ></div>
+              <p
+                class="text-21 font-w700 text-{{
+                  cpuStatus == 'BUSY' ? 'orange' : 'green'
+                }}"
+              >
+                {{ cpuStatus == "BUSY" ? "Ocupado" : "Disponible" }}
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-span-3 px-5 border-l border-gray pb-3"
+            *ngIf="cpuProcess"
+          >
+            <p class="mb-2 text-left">Procesando a</p>
+            <app-card color="beish2 p-2 grid grid-cols-2">
+              <div>
+                <p class="text-20 font-w700 text-left">
+                  Proceso [{{ cpuProcess.id }}]:
+                </p>
+                <ul>
+                  <li class="text-left">
+                    <span class="font-w700">Id:</span> {{ cpuProcess.id }}
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">Life Time:</span>
+                    {{ cpuProcess.timeToLive + "/" + cpuProcess.lifeTime }}
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">Next IO:</span>
+                    {{ cpuProcess.nextIOTTL + "/" + cpuProcess.nextIOTime }}
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">IO:</span>
+                    {{ cpuProcess.iotimeToLive + "/" + cpuProcess.iotime }}
+                  </li>
+                  <li class="text-left">
+                    <span class="font-w700">Quantum:</span>
+                    {{ cpuProcess.quantum }}
+                  </li>
+                </ul>
+              </div>
+              <div class="text-center flex items-center justify-center">
+                <div class="inline-block text-center">
+                  <div
+                    class="w-10 h-10 bg-green rounded-full inline-block"
+                  ></div>
+                  <p class="text-21 font-w700 text-green">
+                    {{
+                      cpuProcess.status == "RUNNING"
+                        ? "Corriendo"
+                        : cpuProcess.status == "READY"
+                        ? "Listo"
+                        : "Bloqueado"
+                    }}
+                  </p>
+                </div>
+              </div>
+            </app-card>
+          </div>
+        </div>
+      </div>
+    </app-card>
+    <app-card color="white h-full">
+      <div class="w-full">
+        <p class="text-28 font-w700 text-center">Eventos</p>
+        <ul>
+          <li class="text-left" *ngFor="let event of events">{{ event }}</li>
+        </ul>
+      </div>
+    </app-card>
+  </div>
+  <div class="grid grid-cols-12 my-5">
+    <p class="text-30 font-w700 text-center col-span-3">Cola de procesos</p>
+    <div class="bg-black h-1 translate-y-5 col-span-9"></div>
+  </div>
+  <div class="grid grid-cols-2 gap-5 h-72 mb-10">
+    <app-card color="white h-72 w-full p-2">
+      <p class="text-28 font-w700 text-center mb-3">Procesos listos</p>
+      <div class="h-52">
+        <app-table [columns]="columns">
+          <tr *ngFor="let data of readyProceesses">
+            <td>{{ data.id }}</td>
+            <td>{{ data.timeToLive + "/" + data.lifeTime }}</td>
+            <td>{{ data.nextIOTTL + "/" + data.nextIOTime }}</td>
+            <td>{{ data.iotimeToLive + "/" + data.iotime }}</td>
+            <td>{{ data.status }}</td>
+            <td>{{ data.quantum }}</td>
+          </tr>
+        </app-table>
+      </div>
+    </app-card>
+    <app-card color="white h-72 w-full p-2">
+      <p class="text-28 font-w700 text-center mb-3">Procesos Bloqueados</p>
+      <div class="h-52">
+        <app-table [columns]="columns">
+          <tr *ngFor="let data of blockProcesses">
+            <td>{{ data.id }}</td>
+            <td>{{ data.timeToLive + "/" + data.lifeTime }}</td>
+            <td>{{ data.nextIOTTL + "/" + data.nextIOTime }}</td>
+            <td>{{ data.iotimeToLive + "/" + data.iotime }}</td>
+            <td>{{ data.status }}</td>
+            <td>{{ data.quantum }}</td>
+          </tr>
+        </app-table>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="w-full flex items-center justify-center" *ngIf="isFinished; else notFinish">
+    <img
+      src="assets/icons/arrow_left_icon.png"
+      class="w-14 mr-5 cursor-pointer"
+      (click)="previousClock()"
+    />
+    <p class="mx-5 text-28 font-w700">
+      <input
+        type="number"
+        [value]="actualClock"
+        min="0"
+        [max]="totalTimes"
+        (input)="getClock(input.value)"
+        #input
+        class="inline-block w-24 text-center rounded border"
+      />
+      de {{ totalTimes }}
+    </p>
+    <img
+      src="assets/icons/arrow_right_icon.png"
+      class="w-14 ml-5 cursor-pointer"
+      (click)="nextClock()"
+    />
+  </div>
+  <ng-template #notFinish>
+    <p class="text-36 font-w700"> Cargando ... </p>
+  </ng-template>
+</main>

@@ -1,0 +1,15 @@
+:host::ng-deep tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+:host::ng-deep td {
+  padding: 0.5rem 1rem;
+}
+
+:host::ng-deep table td + td {
+  border-left: 1px solid #e4e4e4;
+}
+
+#content {
+  overflow: auto;
+}
