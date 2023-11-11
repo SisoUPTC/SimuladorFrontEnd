@@ -7,15 +7,21 @@ import { ResponseApi } from '../models/responseApi';
   providedIn: 'root',
 })
 export class SimulationService {
-  private url = 'https://simuladorbackend-production.up.railway.app/simulator';
+  private url = 'http://localhost:8080/simulator';
   delay: number = 1000;
 
   constructor(private http: HttpClient) {}
 
-  async startSimulation(time: number) {
-    return await firstValueFrom(
-      this.http.post<ResponseApi>(`${this.url}/start/${time}`, null)
-    );
+  async startSimulation(time: number, option: number) {
+    if(option == 0){
+      return await firstValueFrom(
+        this.http.post<ResponseApi>(`${this.url}/start/${time}`, null)
+      );
+    }else{
+      return await firstValueFrom(
+        this.http.post<ResponseApi>(`${this.url}/start/${time}`, null)
+      );
+    }
   }
 
   async getResults(clock: number) {

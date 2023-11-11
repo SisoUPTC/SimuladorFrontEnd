@@ -9,15 +9,15 @@
       [text]="button.text"
       [icon]="button.icon"
       [disabled]="button.disabled"
-      (onClick)="button.id == 1? showWindow(): button.id == 2 ? redirectToGraphics(): redirectToSimulation()"
+      (onClick)="goTo(button.id)"
       class="inline-block w-full mb-5"
     ></app-button>
   </div>
   <div class="absolute bottom-0 w-full px-5">
     <footer class="w-full h-24">
-        <div class="relative w-full h-full">
-            <p class="absolute text-center bottom-2 w-full">V: 1.0.0</p>
-        </div>
-      </footer>
+      <div class="relative w-full h-full">
+        <p class="absolute text-center bottom-2 w-full">V: 1.0.0</p>
+      </div>
+    </footer>
   </div>
 </div>

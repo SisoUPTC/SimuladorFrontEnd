@@ -5,6 +5,7 @@ import { WelcomeComponent } from './componets/welcome/welcome.component';
 import { SimulationComponent } from './componets/simulation/simulation.component';
 import { GraphicsComponent } from './componets/graphics/graphics.component';
 import { simulationGuard } from './guards/simulation.guard';
+import { SimulationMemoryComponent } from './componets/simulation-memory/simulation-memory.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'menu/welcome', pathMatch: 'full' },
@@ -13,7 +14,8 @@ const routes: Routes = [
     component: MenuComponent,
     children: [
       { path: 'welcome', component: WelcomeComponent },
-      { path: 'simulation', component: SimulationComponent, canActivate: [simulationGuard] },
+      { path: 'simulation/cpu', component: SimulationComponent, canActivate: [simulationGuard] },
+      { path: 'simulation/memory', component: SimulationMemoryComponent, canActivate: [simulationGuard] },
       { path: 'graphics', component: GraphicsComponent, canActivate: [simulationGuard]},
     ],
   },

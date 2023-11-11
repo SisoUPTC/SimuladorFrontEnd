@@ -11,6 +11,7 @@ import { TableComponent } from './table/table.component';
 import { LoadingComponent } from './loading/loading.component';
 import { GraphicsComponent } from './graphics/graphics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SimulationMemoryComponent } from './simulation-memory/simulation-memory.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     TableComponent,
     LoadingComponent,
     GraphicsComponent,
+    SimulationMemoryComponent,
   ],
   imports: [
     CommonModule,
