@@ -35,12 +35,24 @@ export class LateralMenuComponent {
       icon: 'assets/icons/start_icon.png',
       disabled: false,
     },
+    {
+      id: 5,
+      text: 'Gráficos Memoria',
+      icon: 'assets/icons/charts_icon.png',
+      disabled: true,
+    },
+    {
+      id: 6,
+      text: 'Resultados Memoria',
+      icon: 'assets/icons/results_icon.png',
+      disabled: true,
+    },
   ];
 
   constructor(
     private router: Router,
     private simulationService: SimulationService
-  ) {}
+  ) { }
 
   redirectToMenu() {
     this.router.navigate(['/menu/welcome']);
@@ -73,7 +85,7 @@ export class LateralMenuComponent {
     if (formValues && formValues.length == 2 && formValues[0] > 0 && formValues[0] <= 20000) {
       MenuComponent.isLoading = true;
       this.simulationService.delay = formValues[1] * 1000;
-      await this.simulationService.startSimulation(formValues[0], 0);
+      await this.simulationService.startSimulation({ time: formValues[0], option: 0 });
       MenuComponent.isLoading = false;
       this.listButtons[1].disabled = false;
       this.listButtons[2].disabled = false;
@@ -88,23 +100,31 @@ export class LateralMenuComponent {
     }
   }
 
-  redirectToGraphics(){
+  redirectToGraphics() {
     this.router.navigate(['/menu/graphics']);
   }
 
-  redirectToSimulation(){
-    this.router.navigate(['/menu/simulation']);
+  redirectToSimulation() {
+    this.router.navigate(['/menu/simulation/cpu']);
   }
 
-  goTo(index: number){
+  goTo(index: number) {
     switch (index) {
       case 1: this.showWindow(); break;
       case 2: this.redirectToGraphics(); break;
       case 3: this.redirectToSimulation(); break;
       case 4: this.showMemoryWindow(); break;
+      case 5: this.redirectToGraphicsMemory(); break;
+      case 6: this.redirectToSimulationMemory(); break;
     }
   }
-  
+  redirectToSimulationMemory() {
+    this.router.navigate(['/menu/simulation/memory']);
+  }
+  redirectToGraphicsMemory() {
+    this.router.navigate(['/menu/graphics/memory']);
+  }
+
   async showMemoryWindow() {
     const { value: formValues } = await Swal.fire({
       title: 'Datos de Entrada',
@@ -120,10 +140,10 @@ export class LateralMenuComponent {
       <hr style="margin-top: 20px">
       <p style="margin-top: 20px">Algoritmo de particionamiento variable de la memoria</p>
       <select id="swal-input4" class="swal2-select border border-gray rounded">
-        <option value="1">First-fit</option>
-        <option value="2">Best-fit</option>
-        <option value="3">Worst-fit</option>
-        <option value="4">Next-fit</option>
+        <option value="0">First-fit</option>
+        <option value="1">Best-fit</option>
+        <option value="2">Worst-fit</option>
+        <option value="3">Next-fit</option>
       </select>`,
       focusConfirm: false,
       preConfirm: () => {
@@ -151,10 +171,10 @@ export class LateralMenuComponent {
     if (formValues && formValues.length == 4 && formValues[0] > 0 && formValues[0] <= 20000 && formValues[2] <= 128) {
       MenuComponent.isLoading = true;
       this.simulationService.delay = formValues[1] * 1000;
-      await this.simulationService.startSimulation(formValues[0], 1);
+      await this.simulationService.startSimulation({ time: formValues[0], option: 1, sizeMemory: formValues[2] * 1024, typeAlghoritm: formValues[3] });
       MenuComponent.isLoading = false;
-      this.listButtons[1].disabled = false;
-      this.listButtons[2].disabled = false;
+      this.listButtons[4].disabled = false
+      this.listButtons[5].disabled = false
       this.router.navigate(['/menu/simulation/memory']);
     } else {
       MenuComponent.isLoading = false;

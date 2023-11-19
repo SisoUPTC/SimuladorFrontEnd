@@ -17,6 +17,7 @@ const routes: Routes = [
       { path: 'simulation/cpu', component: SimulationComponent, canActivate: [simulationGuard] },
       { path: 'simulation/memory', component: SimulationMemoryComponent, canActivate: [simulationGuard] },
       { path: 'graphics', component: GraphicsComponent, canActivate: [simulationGuard]},
+      { path: 'graphics/memory', component: GraphicsComponent, canActivate: [simulationGuard]},
     ],
   },
 ];

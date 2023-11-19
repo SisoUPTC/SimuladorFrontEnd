@@ -8,64 +8,55 @@
     <p class="text-30 font-w700 text-center col-span-3">Cola de procesos</p>
     <div class="bg-black h-1 translate-y-5 col-span-9"></div>
   </div>
-  <div class="h-32 mb-10">
+  <div class="h-32 overflow-auto mb-10">
     <app-card color="white h-72 w-full p-2 grid gap-2 grid-cols-12">
-      <app-card color="beish3" *ngFor="let process of [{}, {}, {}, {}, {}, {}]">
-        <p><b>PID_1</b></p>
+      <app-card color="beish3" *ngFor="let process of readyQueue">
+        <p>
+          <b>PID_{{ process.id }}</b>
+        </p>
         <br />
-        <p>30MB</p>
+        <p>{{ process.size }} MB</p>
       </app-card>
     </app-card>
   </div>
   <div class="grid grid-cols-12 my-5">
-    <p class="text-30 font-w700 text-center col-span-3">Memoria (8 GB)</p>
+    <p class="text-30 font-w700 text-center col-span-3">Memoria ({{ 3 }})</p>
     <div class="bg-black h-1 translate-y-5 col-span-9"></div>
   </div>
-  <div class="h-48 mb-10">
-    <app-card color="white h-72 w-full p-2 grid grid-cols-12 gap-2">
+  <div class="h-[400px] overflow-auto mb-10">
+    <app-card color="white w-full p-2 grid grid-cols-12 gap-2">
       <app-card
-        [color]="process.isFree ? 'green2': 'beish2'"
-        *ngFor="
-          let process of [
-            { isFree: false },
-            { isFree: false },
-            { isFree: false },
-            { isFree: true },
-            { isFree: false },
-            { isFree: false }
-          ]
-        "
+        [color]="process.free ? 'green2' : 'beish2'"
+        *ngFor="let process of memory"
+        class="col-span-2 h-48"
       >
-        <div *ngIf="!process.isFree; else freeBlock">
-          <p><b>PID_1</b></p>
+        <div *ngIf="!process.free; else freeBlock" class="h-48">
+          <p>
+            <b>PID_{{ process.process.id }}</b>
+          </p>
           <br />
-          <p>30MB</p>
+          <p>lifeTime: {{ process.process.lifeTime }}</p>
+          <p>timeToLive: {{ process.process.timeToLive }}</p>
+          <p>status: {{ process.process.status }}</p>
+          <p>{{ process.process.size }} MB</p>
         </div>
         <ng-template #freeBlock>
-          <div>
-            <p><b>FREE</b></p>
+          <div class="h-48">
+            <p><b>Free</b></p>
             <br />
-            <p>30MB</p>
+            <p>{{ process.size }} MB</p>
           </div>
         </ng-template>
-      </app-card>
-      <app-card color="green2" class="col-span-6">
-        <div>
-          <p><b>FREE</b></p>
-          <br />
-          <p>30MB</p>
-        </div>
       </app-card>
     </app-card>
   </div>
   <div
-    class="w-full flex items-center justify-center mt-32"
+    class="w-full flex items-center justify-center"
     *ngIf="isFinished; else notFinish"
   >
     <img
       src="assets/icons/arrow_left_icon.png"
       class="w-14 mr-5 cursor-pointer"
-      (click)="previousClock()"
     />
     <p class="mx-5 text-28 font-w700">
       <input

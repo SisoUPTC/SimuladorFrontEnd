@@ -9,52 +9,37 @@ import { SimulationService } from 'src/app/services/simulation.service';
   styleUrls: ['./simulation-memory.component.css']
 })
 export class SimulationMemoryComponent {
-  columns = ['id', 'lifeTime', 'nextIO', 'io', 'state', 'quantum'];
-  readyProceesses: Process[] = [];
-  blockProcesses: Process[] = [];
   actualClock = 0;
-  cpuStatus: 'IDLE' | 'BUSY' = 'IDLE';
-  cpuProcess?: Process;
   events: string[] = [];
   totalTimes: number = 0;
   isFinished = false;
+  readyQueue: Array<any> = []
+  memory: any = {}
 
   constructor(private simulationService: SimulationService) { }
 
   ngOnInit(): void {
-    this.getResult(this.actualClock);
+    this.getResult(this.actualClock)
   }
 
   private async getResult(clock: number) {
-    const results: ResponseApi = await this.simulationService.getResults(clock);
-    this.actualClock = results.data.clock;
-    this.cpuStatus = results.data.cpuStatus;
-    this.cpuProcess = results.data.cpuProcess;
+    const results: ResponseApi = await this.simulationService.getResultsMemory(clock);
     this.totalTimes = results.data.totalTimes;
-    this.readyProceesses = results.data.readyProceesses;
-    this.blockProcesses = results.data.blockProcesses;
-    this.events = results.data.events;
+    this.readyQueue = results.data.readyProceesses;
+    this.memory = results.data.memoryProccesses;
     this.startSimulation();
-  }
-
-  previousClock() {
-    if (this.actualClock > 0) {
-      this.getResult(--this.actualClock);
-    }
   }
 
   startSimulation() {
     const delay = this.simulationService.delay
     const timeOut = setTimeout(async () => {
       if (await this.nextClock()) {
-        console.log('termino')
         clearTimeout(timeOut);
         this.isFinished = true;
         return
       }
     }, delay)
   }
-
 
   async nextClock() {
     if (this.actualClock < this.totalTimes) {
