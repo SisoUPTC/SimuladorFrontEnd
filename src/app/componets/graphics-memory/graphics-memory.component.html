@@ -1,0 +1,95 @@
+<p class="text-48 font-w700">Gráficas de la simulación</p>
+<div class="grid grid-cols-9 mt-10">
+  <div class="col-span-3">
+    <p class="text-28 font-w700">Cantidad de procesos en las colas</p>
+    <div class="h-5"></div>
+    <span class="mx-5 text-20 font-w700 text-chiken-yellow">{{
+      quantyProcessQueues[0]?.value
+    }}</span>
+    <span class="mx-5 text-20 font-w700 text-orange">{{
+      quantyProcessQueues[1]?.value
+    }}</span>
+    <div class="h-24"></div>
+    <p class="text-28 font-w700">Cantidad de procesos finalizados por la CPU</p>
+    <div class="h-5"></div>
+    <span class="text-20 font-w700 text-chiken-yellow">{{
+      totalEndedProccess
+    }}</span>
+  </div>
+  <div class="col-span-6">
+    <ngx-charts-bar-horizontal
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="quantyProcessQueues"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+    ></ngx-charts-bar-horizontal>
+
+    <div class="h-5"></div>
+
+    <ngx-charts-area-chart
+      [view]="view2"
+      [scheme]="colorScheme"
+      [legend]="false"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="true"
+      [yAxis]="true"
+      xAxisLabel="Tiempo (segundos)"
+      yAxisLabel="Cantidad de procesos"
+      [results]="quantyEndendCPU"
+    >
+    </ngx-charts-area-chart>
+  </div>
+</div>
+<p class="text-28 font-w700">Tiempos resultantes (TTL, NextIO, IO)</p>
+<div class="grid grid-cols-3">
+  <div class="text-center">
+    <ngx-charts-pie-chart
+      class="inline-block"
+      [view]="viewPie"
+      [scheme]="colorScheme"
+      [results]="pieTTL"
+      [gradient]="gradient"
+      [legend]="false"
+      [labels]="false"
+      [doughnut]="false"
+    >
+    </ngx-charts-pie-chart>
+    <p class="text-20 font-w700">TTL</p>
+  </div>
+  <div class="text-center">
+    <ngx-charts-pie-chart
+      class="inline-block"
+      [view]="viewPie"
+      [scheme]="colorScheme"
+      [results]="pieNextIO"
+      [gradient]="gradient"
+      [legend]="false"
+      [labels]="false"
+      [doughnut]="false"
+    >
+    </ngx-charts-pie-chart>
+    <p class="text-20 font-w700">NextIO</p>
+  </div>
+  <div class="text-center">
+    <ngx-charts-pie-chart
+      class="inline-block"
+      [view]="viewPie"
+      [scheme]="colorScheme"
+      [results]="pieIO"
+      [gradient]="gradient"
+      [legend]="false"
+      [labels]="false"
+      [doughnut]="false"
+    >
+    </ngx-charts-pie-chart>
+    <p class="text-20 font-w700">IO</p>
+  </div>
+</div>
