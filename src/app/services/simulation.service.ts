@@ -37,6 +37,12 @@ export class SimulationService {
     );
   }
 
+  async getGraphicsMemory(clock: number) {
+    return await firstValueFrom(
+      this.http.get<ResponseApi>(`${this.url}/graphics/memory/${clock}`)
+    );
+  }
+
   async getGraphics() {
     return await firstValueFrom(
       this.http.get<ResponseApi>(`${this.url}/graphics`)

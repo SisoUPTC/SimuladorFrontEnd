@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
+import { ResponseApi } from 'src/app/models/responseApi';
 import { SimulationService } from 'src/app/services/simulation.service';
 
 @Component({
@@ -7,10 +8,12 @@ import { SimulationService } from 'src/app/services/simulation.service';
   templateUrl: './graphics-memory.component.html',
   styleUrls: ['./graphics-memory.component.css']
 })
-export class GraphicsMemoryComponent {
+export class GraphicsMemoryComponent implements OnInit {
+
   quantyProcessQueues: any[] = [];
   view: [number, number] = [800, 200];
   view2: [number, number] = [800, 230];
+  view3: [number, number] = [400, 250];
 
   // options
   showXAxis: boolean = true;
@@ -18,7 +21,7 @@ export class GraphicsMemoryComponent {
   gradient: boolean = false;
   showLegend: boolean = false;
   showXAxisLabel: boolean = true;
-  yAxisLabel: string = 'Colas de Procesos';
+  yAxisLabel: string = 'Memoria RAM';
   showYAxisLabel: boolean = true;
   xAxisLabel: string = 'Cantidad de Procesos';
 
@@ -29,10 +32,17 @@ export class GraphicsMemoryComponent {
     domain: ['#FFCC05', '#FF7D05', '#FC7765', '#FFBA7A'],
   };
 
+  colorSchemeRG: Color = {
+    name: 'vivid',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#FF7D05', '#7AC270'],
+  };
+
   //
 
   viewPie: [number, number] = [200, 200];
-  quantyEndendCPU: any[] = [
+  promedioSizeProcess: any[] = [
     {
       name: 'Procesos atendidos por CPU',
       series: [],
@@ -40,172 +50,108 @@ export class GraphicsMemoryComponent {
   ];
 
   //
+  // cantidad de procesos en la memoria, 
+  // porcentaje ocupacion de la memoria, 
+  // bloques libres y bloques ocupados, 
+  // promedio de tamano de procesos
 
-  pieTTL: any[] = [];
+  piePercentageUse: any[] = [];
+  quantyBlocksUseFree: any[] = [];
   pieIO: any[] = [];
   pieNextIO: any[] = [];
-  totalEndedProccess: number = 0;
+  percentageUse: number = 0;
+  isFinished: boolean = true;
+  actualClock: number = 0;
+  totalTimes: number = 0;
 
-  constructor(private simulationService: SimulationService) {}
+  constructor(private simulationService: SimulationService) { }
 
-  ngOnInit(): void {
-    this.getGraphics();
-  }
-
-  async getGraphics() {
-    const results = await this.simulationService.getGraphics();
+  async getResult(clock: number) {
+    const results = await this.simulationService.getGraphicsMemory(clock);
+    this.totalTimes = results.data.totalTimes;
     this.quantyProcessQueues = [
       {
-        name: 'Listos',
-        value: results.data.quantyProcessQueues[0],
+        name: 'Proceos en ejecución',
+        value: results.data.quantyProcessMemory,
       },
       {
-        name: 'Bloqueados',
-        value: results.data.quantyProcessQueues[1],
-      },
-    ];
-    this.quantyEndendCPU = [
-      {
-        name: 'Procesos atendidos por CPU',
-        series: results.data.quantyEndendCPU.map((value: any) => {
-          return {
-            name: `${value ? value.name : ''}`,
-            value: value ? value.value : 0,
-          };
-        }),
-      },
-    ];
-    this.totalEndedProccess = results.data.totalEndedProccess;
-    this.pieTTL = [
-      {
-        name: results.data.timesTTL[0].name,
-        value: results.data.timesTTL[0].value,
-      },
-      {
-        name: results.data.timesTTL[1].name,
-        value: results.data.timesTTL[1].value,
-      },
-      {
-        name: results.data.timesTTL[2].name,
-        value: results.data.timesTTL[2].value,
-      },
-      {
-        name: results.data.timesTTL[3].name,
-        value: results.data.timesTTL[3].value,
-      },
-      {
-        name: results.data.timesTTL[4].name,
-        value: results.data.timesTTL[4].value,
-      },
-      {
-        name: results.data.timesTTL[5].name,
-        value: results.data.timesTTL[5].value,
-      },
-      {
-        name: results.data.timesTTL[6].name,
-        value: results.data.timesTTL[6].value,
-      },
-      {
-        name: results.data.timesTTL[7].name,
-        value: results.data.timesTTL[7].value,
-      },
-      {
-        name: results.data.timesTTL[8].name,
-        value: results.data.timesTTL[8].value,
-      },
-      {
-        name: results.data.timesTTL[9].name,
-        value: results.data.timesTTL[9].value,
-      },
-      {
-        name: results.data.timesTTL[10].name,
-        value: results.data.timesTTL[10].value,
-      },
-      {
-        name: results.data.timesTTL[11].name,
-        value: results.data.timesTTL[11].value,
-      },
-      {
-        name: results.data.timesTTL[12].name,
-        value: results.data.timesTTL[12].value,
-      },
-      {
-        name: results.data.timesTTL[13].name,
-        value: results.data.timesTTL[13].value,
-      },
-      {
-        name: results.data.timesTTL[14].name,
-        value: results.data.timesTTL[14].value,
-      },
-      {
-        name: results.data.timesTTL[15].name,
-        value: results.data.timesTTL[15].value,
-      },
-      {
-        name: results.data.timesTTL[16].name,
-        value: results.data.timesTTL[16].value,
-      },
-      {
-        name: results.data.timesTTL[17].name,
-        value: results.data.timesTTL[17].value,
-      },
-      {
-        name: results.data.timesTTL[18].name,
-        value: results.data.timesTTL[18].value,
-      },
-      {
-        name: results.data.timesTTL[19].name,
-        value: results.data.timesTTL[19].value,
-      },
-      {
-        name: results.data.timesTTL[20].name,
-        value: results.data.timesTTL[20].value,
+        name: 'Proceos en espera',
+        value: results.data.quantyProcessWait,
       }
     ];
-    this.pieNextIO = [
+    this.promedioSizeProcess = [
       {
-        name: results.data.timesNextIO[0].name,
-        value: results.data.timesNextIO[0].value,
-      },
-      {
-        name: results.data.timesNextIO[1].name,
-        value: results.data.timesNextIO[1].value,
-      },
-      {
-        name: results.data.timesNextIO[2].name,
-        value: results.data.timesNextIO[2].value,
-      },
-      {
-        name: results.data.timesNextIO[3].name,
-        value: results.data.timesNextIO[3].value,
-      },
-      {
-        name: results.data.timesNextIO[4].name,
-        value: results.data.timesNextIO[4].value,
+        name: 'Procesos atendidos por CPU',
+        series: results.data.promedioSizeProcess.map((promedio: any) => ({
+          name: `${promedio.name}`,
+          value: `${promedio.value}`
+        }))
       },
     ];
-    this.pieIO = [
+    this.percentageUse = results.data.percentageUse;
+    this.piePercentageUse = [
       {
-        name: results.data.timesIO[0].name,
-        value: results.data.timesIO[0].value,
+        name: 'En uso',
+        value: results.data.percentageUse,
       },
       {
-        name: results.data.timesIO[1].name,
-        value: results.data.timesIO[1].value,
-      },
-      {
-        name: results.data.timesIO[2].name,
-        value: results.data.timesIO[2].value,
-      },
-      {
-        name: results.data.timesIO[3].name,
-        value: results.data.timesIO[3].value,
-      },
-      {
-        name: results.data.timesIO[4].name,
-        value: results.data.timesIO[4].value,
+        name: 'Libre',
+        value: results.data.percentageFree,
       },
     ];
-    console.log(this.pieTTL);
+    this.quantyBlocksUseFree = [
+      {
+        name: 'Bloques libres',
+        value: results.data.blocksFree,
+      },
+      {
+        name: 'Bloques ocupados',
+        value: results.data.blocksUsed,
+      }
+    ]
+    this.startSimulation();
   }
+
+  async previousClock() {
+    if (this.actualClock > 0) {
+      await this.getResult(--this.actualClock);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  ngOnInit(): void {
+    this.getResult(this.actualClock)
+  }
+
+  startSimulation() {
+    const delay = this.simulationService.delay
+    const timeOut = setTimeout(async () => {
+      if (await this.nextClock()) {
+        clearTimeout(timeOut);
+        this.isFinished = true;
+        return
+      }
+    }, delay)
+  }
+
+  async nextClock() {
+    if (this.actualClock < this.totalTimes) {
+      await this.getResult(++this.actualClock);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  getClock(clock: string) {
+    if (clock) {
+      const clockNumber = parseInt(clock);
+      if (clockNumber >= 0 && clockNumber <= this.totalTimes) {
+        this.getResult(clockNumber);
+      }
+    }
+  }
+
 }

@@ -1,20 +1,51 @@
-<p class="text-48 font-w700">Gráficas de la simulación</p>
+<div class="grid grid-cols-2">
+  <p class="text-48 font-w700">Gráficas de la simulación</p>
+  <div
+    class="w-full flex items-center justify-center"
+    *ngIf="isFinished; else notFinish"
+  >
+    <img
+      src="assets/icons/arrow_left_icon.png"
+      class="w-8 mr-5 cursor-pointer"
+      (click)="previousClock()"
+    />
+    <p class="mx-5 text-28 font-w700">
+      <input
+        type="number"
+        [value]="actualClock"
+        min="0"
+        [max]="totalTimes"
+        (input)="getClock(input.value)"
+        #input
+        class="inline-block w-24 text-center rounded border"
+      />
+      de {{ totalTimes }}
+    </p>
+    <img
+      src="assets/icons/arrow_right_icon.png"
+      class="w-8 ml-5 cursor-pointer"
+      (click)="nextClock()"
+    />
+  </div>
+  <ng-template #notFinish>
+    <p class="text-36 font-w700">Cargando ...</p>
+  </ng-template>
+</div>
 <div class="grid grid-cols-9 mt-10">
   <div class="col-span-3">
-    <p class="text-28 font-w700">Cantidad de procesos en las colas</p>
+    <p class="text-28 font-w700">Cantidad de procesos en la memoria / espera</p>
     <div class="h-5"></div>
-    <span class="mx-5 text-20 font-w700 text-chiken-yellow">{{
-      quantyProcessQueues[0]?.value
-    }}</span>
-    <span class="mx-5 text-20 font-w700 text-orange">{{
-      quantyProcessQueues[1]?.value
-    }}</span>
+    <span class="mx-5 text-20 font-w700 text-orange">{{ quantyProcessQueues[0].value ?? -1 }}</span>
+    <span class="mx-5 text-20 font-w700 text-orange">{{ quantyProcessQueues[1].value ?? -1 }}</span>
     <div class="h-24"></div>
-    <p class="text-28 font-w700">Cantidad de procesos finalizados por la CPU</p>
+    <p class="text-28 font-w700 translate-x-[170px] inline-block">
+      Porcentaje de ocupación de la memoria
+    </p>
     <div class="h-5"></div>
-    <span class="text-20 font-w700 text-chiken-yellow">{{
-      totalEndedProccess
-    }}</span>
+    <span
+      class="text-20 font-w700 text-chiken-yellow translate-x-[170px] inline-block"
+      >{{ percentageUse }} %</span
+    >
   </div>
   <div class="col-span-6">
     <ngx-charts-bar-horizontal
@@ -33,63 +64,51 @@
 
     <div class="h-5"></div>
 
+    <ngx-charts-pie-chart
+      class="translate-x-[-100px] translate-y-[-30px] inline-block"
+      [view]="viewPie"
+      [scheme]="colorSchemeRG"
+      [results]="piePercentageUse"
+      [gradient]="gradient"
+      [legend]="false"
+      [labels]="false"
+      [doughnut]="false"
+    >
+    </ngx-charts-pie-chart>
+  </div>
+</div>
+<div class="grid grid-cols-2">
+  <div class="text-center">
+    <ngx-charts-bar-vertical
+      class="inline-block"
+      [view]="view3"
+      [scheme]="colorScheme"
+      [results]="quantyBlocksUseFree"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="'Bloques'"
+      [yAxisLabel]="'Cantidad ocupación'"
+    ></ngx-charts-bar-vertical>
+    <p class="text-20 font-w700">Bloques libres y Bloques ocupados</p>
+  </div>
+  <div class="text-center">
     <ngx-charts-area-chart
-      [view]="view2"
+      class="inline-block"
+      [view]="view3"
       [scheme]="colorScheme"
       [legend]="false"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
       [xAxis]="true"
       [yAxis]="true"
-      xAxisLabel="Tiempo (segundos)"
-      yAxisLabel="Cantidad de procesos"
-      [results]="quantyEndendCPU"
-    >
-    </ngx-charts-area-chart>
-  </div>
-</div>
-<p class="text-28 font-w700">Tiempos resultantes (TTL, NextIO, IO)</p>
-<div class="grid grid-cols-3">
-  <div class="text-center">
-    <ngx-charts-pie-chart
-      class="inline-block"
-      [view]="viewPie"
-      [scheme]="colorScheme"
-      [results]="pieTTL"
-      [gradient]="gradient"
-      [legend]="false"
-      [labels]="false"
-      [doughnut]="false"
-    >
-    </ngx-charts-pie-chart>
-    <p class="text-20 font-w700">TTL</p>
-  </div>
-  <div class="text-center">
-    <ngx-charts-pie-chart
-      class="inline-block"
-      [view]="viewPie"
-      [scheme]="colorScheme"
-      [results]="pieNextIO"
-      [gradient]="gradient"
-      [legend]="false"
-      [labels]="false"
-      [doughnut]="false"
-    >
-    </ngx-charts-pie-chart>
-    <p class="text-20 font-w700">NextIO</p>
-  </div>
-  <div class="text-center">
-    <ngx-charts-pie-chart
-      class="inline-block"
-      [view]="viewPie"
-      [scheme]="colorScheme"
-      [results]="pieIO"
-      [gradient]="gradient"
-      [legend]="false"
-      [labels]="false"
-      [doughnut]="false"
-    >
-    </ngx-charts-pie-chart>
-    <p class="text-20 font-w700">IO</p>
+      xAxisLabel="Tamaño de procesos (MB)"
+      yAxisLabel="Tamaño en memoria (MB)"
+      [results]="promedioSizeProcess"
+    ></ngx-charts-area-chart>
+    <p class="text-20 font-w700">Promedio de tamano de procesos</p>
   </div>
 </div>
